@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">EditeurProjet</string>
+    
+    <string-array name="Monspinner">
+        <item>Aucun filtre</item>
+        <item>Gris</item>
+        <item>Gris RS</item>
+        <item>Teinte Aleatoire</item>
+        <item>Teinte Aleatoire RS</item>
+        <item>Conserve Rouge</item>
+        <item>Conserve Rouge RS</item>
+        <item>Contraste+(img2)</item>
+        <item>Contraste-(img2)</item>
+
+
+
+    </string-array>
+</resources>
