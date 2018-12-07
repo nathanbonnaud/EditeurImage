@@ -35,23 +35,15 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.mipmap.index, options);
         i.setImageBitmap(image1);
 
-        ImageView i2 = (ImageView) findViewById(R.id.imageView);
-        BitmapFactory.Options options2 = new BitmapFactory.Options();
-        options.inMutable = true;
-        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.mipmap.index2, options);
-        i2.setImageBitmap(image2);
+
         //ContrasteCouleursDRS(image1);
-        Floulissage(image1,image2);
+        Floulissage(image1);
         /*
         int largeur = options.outWidth;  /// * 2.6
         int hauteur = options.outHeight;   /// *2.6
         System.out.println("largeur:" + largeur + " hauteur : " + hauteur); */
         TextView tv = (TextView) findViewById(R.id.taille);
         tv.setText("Mon Editeur d'Image");
-
-
-
-
 
 
 
@@ -710,15 +702,23 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-    private void Floulissage(Bitmap bmp, Bitmap newimg){
-        for (int x = 1; x < newimg.getWidth()-1; x++){
-            for (int y = 1; y < newimg.getHeight()-1; y++ ){
+    private void Floulissage(Bitmap bmp){
+
+        ImageView i = (ImageView) findViewById(R.id.imageView5);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inMutable = true;
+        Bitmap newimg = Bitmap.createBitmap(bmp.getWidth(),bmp.getHeight(), bmp.getConfig() );
+        int n = 2;
+        int div = (2*n +1)*(2*n+1);
+
+        for (int x = n; x < newimg.getWidth()-n; x++){
+            for (int y = n; y < newimg.getHeight()-n; y++ ){
                 /// va chercher les valeurs r g b des pixels autours //
                 int a =0;
                 int b = 0;
                 int c = 0;
-                for (int x2 = x -1; x2 <= x+1; x2++) {
-                    for (int y2 = y - 1; y2 <= y + 1; y2++) {
+                for (int x2 = x -n; x2 <= x+n; x2++) {
+                    for (int y2 = y - n; y2 <= y + n; y2++) {
                         int e = bmp.getPixel(x2, y2);
                         a = a + Color.red(e);
                         b = b + Color.green(e);
@@ -727,9 +727,11 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
                 }
 
 
-                newimg.setPixel(x,y,Color.argb(1,a/9,b/9,c/9));
+                newimg.setPixel(x,y,Color.argb(1,a/div,b/div,c/div));
             }
         }
+        i.setImageBitmap(newimg);
+
 
     }
 
