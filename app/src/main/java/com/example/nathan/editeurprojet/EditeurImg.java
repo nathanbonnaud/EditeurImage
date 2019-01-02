@@ -16,9 +16,11 @@ import android.widget.TextView;
 
 import com.android.rssample.*;
 
+import java.sql.Time;
+
 
 public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    boolean on = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +39,16 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
         //ContrasteCouleursDRS(image1);
-        Floulissage(image1);
+        //Floulissage(image1);
+
         /*
         int largeur = options.outWidth;  /// * 2.6
         int hauteur = options.outHeight;   /// *2.6
         System.out.println("largeur:" + largeur + " hauteur : " + hauteur); */
-        TextView tv = (TextView) findViewById(R.id.taille);
-        tv.setText("Mon Editeur d'Image");
+
+
+
+
 
 
 
@@ -51,11 +56,11 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         /// MENU DEROULANT///
 
 
-        Spinner monspinner = findViewById(R.id.spinner1);
+        Spinner myspinner = findViewById(R.id.spinner1);
         ArrayAdapter<String> monadaptater = new ArrayAdapter<String>(EditeurImg.this,android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.Monspinner));
         monadaptater.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        monspinner.setAdapter(monadaptater);
-        monspinner.setOnItemSelectedListener(this);
+        myspinner.setAdapter(monadaptater);
+        myspinner.setOnItemSelectedListener(this);
 
         /////
 
@@ -68,7 +73,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
+        TextView tv = (TextView) findViewById(R.id.taille);
         ImageView i = (ImageView) findViewById(R.id.imageView5);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
@@ -78,26 +83,47 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         BitmapFactory.Options options2 = new BitmapFactory.Options();
         options2.inMutable = true;
         Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.mipmap.index2, options);
-
+        Long time = System.currentTimeMillis();
 
         switch (position) {
             case 0:
+                tv.setText(" ");
                 break;
             case 1:
                 ToGrey(image1);
-                on = true;
+                long timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Gris image1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Gris image1 = " + timeafter + " ms");
+
                 break;
             case 2:
-                toGreyRS(image1);
-                on = true;
+                ToGrey(image2);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Gris image2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Gris image2 = " + timeafter + " ms");
+
                 break;
             case 3:
-                Coloriser(image1);
-                on = true;
+                toGreyRS(image1);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Gris RS image1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Gris RS image 1= " + timeafter + " ms");
+
                 break;
             case 4:
+                toGreyRS(image2);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Gris RS image2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Gris RS image 2= " + timeafter + " ms");
+
+                break;
+            /*case 3:
+                //Coloriser(image1);
+
+               // break;
+            case 4:
                 ColoriserRS(image1);
-                on =true;
+
                 break;
             case 5:
                 Conserve(image1,"red");
@@ -114,7 +140,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             case 8:
                 ContrasteCouleur(image2,false );
                 on = true;
-                break;
+                break;*/
         }
         i.setImageBitmap(image1);
         i2.setImageBitmap(image2);
@@ -134,13 +160,35 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
     protected void ToGrey(Bitmap bmp) {
+
+
+        int [] pixel = new int[bmp.getWidth()*bmp.getHeight()];
+        int [] greytab = new int[bmp.getWidth()*bmp.getHeight()];
+        bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+        for (int i =0; i < pixel.length ; i++){
+            //greytab[i] = Color.argb(1,(int)( 0.3 * Color.red(pixel[i])) ,0.59 *Color.green(pixel[i]),0.11* Color.blue(pixel[i]));
+            greytab[i] = (int) (0.3 * Color.red(pixel[i]) + 0.59 *Color.green(pixel[i]) + 0.11* Color.blue(pixel[i]));
+        }
+        bmp.setPixels(greytab,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+
+
+        /// Version plus coûteuse ///
+
+
+        /*
         for (int x = 0; x < bmp.getWidth(); x++) {
             for (int y = 0; y < bmp.getHeight(); y++) {
                 int a = bmp.getPixel(x,y);
-                double Gris = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
-                bmp.setPixel(x, y, Color.argb(1, (int) Gris, (int) Gris, (int) Gris));
+                double Grey = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
+                bmp.setpixel
             }
-        }
+        }*/
+
+
+        ////
+
     }
 
 

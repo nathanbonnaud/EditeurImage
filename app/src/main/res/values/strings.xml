@@ -3,12 +3,18 @@
     
     <string-array name="Monspinner">
         <item>Aucun filtre</item>
-        <item>Gris</item>
-        <item>Gris RS</item>
-        <item>Teinte Aleatoire</item>
-        <item>Teinte Aleatoire RS</item>
-        <item>Conserve Rouge</item>
-        <item>Conserve Rouge RS</item>
+        <item>Gris (img1)</item>
+        <item>Gris (img2)</item>
+        <item>Gris RS (img1)</item>
+        <item>Gris RS (img2)</item>
+        <item>Teinte Aleatoire (img1)</item>
+        <item>Teinte Aleatoire (img2)</item>
+        <item>Teinte Aleatoire RS (img1)</item>
+        <item>Teinte Aleatoire RS (img2)</item>
+        <item>Conserve Rouge (img1)</item>
+        <item>Conserve Rouge (img2)</item>
+        <item>Conserve Rouge RS (img1)</item>
+        <item>Conserve Rouge RS (img2)</item>
         <item>Contraste+(img2)</item>
         <item>Contraste-(img2)</item>
 
