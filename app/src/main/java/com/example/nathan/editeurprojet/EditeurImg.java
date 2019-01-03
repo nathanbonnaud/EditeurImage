@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.android.rssample.*;
 
-import java.sql.Time;
-
 
 public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -28,14 +26,19 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editeur_img);
 
-        // Recupère et affiche la taille de l'image//
 
+
+        ImageView i2 = (ImageView) findViewById(R.id.imageView);
+        BitmapFactory.Options options2 = new BitmapFactory.Options();
+        options2.inMutable = true;
+        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.index2, options2);
 
         ImageView i = (ImageView) findViewById(R.id.imageView5);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
-        Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.mipmap.index, options);
+        Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.drawable.index, options);
         i.setImageBitmap(image1);
+
 
 
         //ContrasteCouleursDRS(image1);
@@ -77,12 +80,12 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         ImageView i = (ImageView) findViewById(R.id.imageView5);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
-        Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.mipmap.index, options);
+        Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.drawable.index3, options);
 
         ImageView i2 = (ImageView) findViewById(R.id.imageView);
         BitmapFactory.Options options2 = new BitmapFactory.Options();
         options2.inMutable = true;
-        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.mipmap.index2, options);
+        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.index2, options);
         Long time = System.currentTimeMillis();
 
         switch (position) {
@@ -117,6 +120,9 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
                 System.out.println( "temps d'execution Gris RS image 2= " + timeafter + " ms");
 
                 break;
+            case 5:
+                Floulissage(image1);
+                break;
             /*case 3:
                 //Coloriser(image1);
 
@@ -142,7 +148,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
                 on = true;
                 break;*/
         }
-        i.setImageBitmap(image1);
+        //i.setImageBitmap(image1);
         i2.setImageBitmap(image2);
     }
 
@@ -167,8 +173,8 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
 
         for (int i =0; i < pixel.length ; i++){
-            //greytab[i] = Color.argb(1,(int)( 0.3 * Color.red(pixel[i])) ,0.59 *Color.green(pixel[i]),0.11* Color.blue(pixel[i]));
-            greytab[i] = (int) (0.3 * Color.red(pixel[i]) + 0.59 *Color.green(pixel[i]) + 0.11* Color.blue(pixel[i]));
+            int Grey = (int)( 0.3 * Color.red(pixel[i]) +0.59 *Color.green(pixel[i])+0.11* Color.blue(pixel[i]));
+            greytab[i] = Color.argb(1,Grey,Grey,Grey);
         }
         bmp.setPixels(greytab,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
 
@@ -182,7 +188,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             for (int y = 0; y < bmp.getHeight(); y++) {
                 int a = bmp.getPixel(x,y);
                 double Grey = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
-                bmp.setpixel
+                bmp.setpixel(x,y,(Grey,Grey,Grey));
             }
         }*/
 
@@ -717,7 +723,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
     /// CONTRASTE COULEURS RENDERSCRIPT ///
 
-    /*
+
     private void ContrasteCouleursDRS(Bitmap bmp) {
         RenderScript rs = RenderScript.create(this);
 
@@ -726,7 +732,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
         ScriptC_contrasteD contraste = new ScriptC_contrasteD(rs);
 
-        contraste.forEach_GetMinMaxColor(input, output);
+        contraste.forEach_GetMinMaxColor(input);
         contraste.invoke_createlutred();
         contraste.invoke_createlutgreen();
         contraste.invoke_createlutblue();
@@ -740,7 +746,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         contraste.destroy();
         rs.destroy();
 
-    }*/
+    }
 
 
     /// Flou Lissage ///
@@ -750,35 +756,51 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-    private void Floulissage(Bitmap bmp){
-
+    private Bitmap Floulissage(Bitmap bmp){
         ImageView i = (ImageView) findViewById(R.id.imageView5);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inMutable = true;
         Bitmap newimg = Bitmap.createBitmap(bmp.getWidth(),bmp.getHeight(), bmp.getConfig() );
-        int n = 2;
+
+        /// taille du masque appliqué ///
+
+
+        int n = 10;
         int div = (2*n +1)*(2*n+1);
+
+
+
+        int [] pixel = new int[bmp.getWidth()*bmp.getHeight()];
+        int [] newpixel = new int[bmp.getWidth()*bmp.getHeight()];
+        bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+
 
         for (int x = n; x < newimg.getWidth()-n; x++){
             for (int y = n; y < newimg.getHeight()-n; y++ ){
+
                 /// va chercher les valeurs r g b des pixels autours //
                 int a =0;
                 int b = 0;
                 int c = 0;
                 for (int x2 = x -n; x2 <= x+n; x2++) {
                     for (int y2 = y - n; y2 <= y + n; y2++) {
-                        int e = bmp.getPixel(x2, y2);
+                        int e = pixel[x2 + (y2*bmp.getWidth())];
                         a = a + Color.red(e);
                         b = b + Color.green(e);
                         c = c + Color.blue(e);
+
                     }
                 }
 
+                newpixel[x + (y*newimg.getWidth())] = Color.argb(255,a/div,b/div,c/div);
 
-                newimg.setPixel(x,y,Color.argb(1,a/div,b/div,c/div));
+
+
             }
         }
+
+        newimg.setPixels(newpixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
         i.setImageBitmap(newimg);
+        return newimg;
 
 
     }

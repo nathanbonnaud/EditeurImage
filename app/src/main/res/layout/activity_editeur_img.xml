@@ -20,7 +20,7 @@
         android:id="@+id/imageView5"
         android:layout_width="421dp"
         android:layout_height="285dp"
-        android:src="@mipmap/index"
+        android:src="@drawable/index"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -58,6 +58,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5"
         app:layout_constraintVertical_bias="0.569"
-        app:srcCompat="@mipmap/index2" />
+        app:srcCompat="@drawable/index2" />
 
 </android.support.constraint.ConstraintLayout>

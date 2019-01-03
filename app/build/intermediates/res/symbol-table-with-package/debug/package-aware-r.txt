@@ -631,6 +631,9 @@ drawable abc_textfield_search_material
 drawable abc_vector_test
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable index
+drawable index2
+drawable index3
 drawable notification_action_background
 drawable notification_bg
 drawable notification_bg_low
@@ -842,9 +845,6 @@ layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 mipmap ic_launcher
 mipmap ic_launcher_round
-mipmap index
-mipmap index2
-mipmap index3
 raw conserve
 raw contrasted
 raw grey
