@@ -18,7 +18,10 @@ uchar4  RS_KERNEL  toColor(uchar4  in) {
        S = 1 -(min(min(pixelf.r,pixelf.g),pixelf.b)/(max(max(pixelf.r,pixelf.g),pixelf.b)));
     }
     V = (max(max(pixelf.r,pixelf.g),pixelf.b));
+
+
     int t;
+
     if ((T/60) > 0){
        t = T/60 % 6;
     }else{

@@ -80,7 +80,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         ImageView i = (ImageView) findViewById(R.id.imageView5);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
-        Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.drawable.index3, options);
+        Bitmap image1 = BitmapFactory.decodeResource(getResources(), R.drawable.index, options);
 
         ImageView i2 = (ImageView) findViewById(R.id.imageView);
         BitmapFactory.Options options2 = new BitmapFactory.Options();
@@ -121,7 +121,52 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
                 break;
             case 5:
-                Floulissage(image1);
+                Coloriser(image1);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Coloriser image1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Coloriser image1= " + timeafter + " ms");
+                break;
+            case 6:
+                Coloriser(image2);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Coloriser image2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Coloriser image2= " + timeafter + " ms");
+                break;
+            case 7:
+                ColoriserRS(image1);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Coloriser RS image1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Coloriser RS image1= " + timeafter + " ms");
+                break;
+            case 8:
+                ColoriserRS(image2);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Coloriser RS image2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Coloriser RS image2= " + timeafter + " ms");
+                break;
+            case 9:
+                Conserve(image1, "red");
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Conserve image1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Conserve image1= " + timeafter + " ms");
+                break;
+            case 10:
+                Conserve(image2, "green");
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Conserve image2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Conserve image2= " + timeafter + " ms");
+                break;
+            case 11:
+                ConserveRS(image1);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Conserve RS image1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Conserve RS image1= " + timeafter + " ms");
+                break;
+            case 12:
+                ConserveRS(image2);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Conserve RS image2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Conserve RS image2= " + timeafter + " ms");
                 break;
             /*case 3:
                 //Coloriser(image1);
@@ -148,7 +193,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
                 on = true;
                 break;*/
         }
-        //i.setImageBitmap(image1);
+        i.setImageBitmap(image1);
         i2.setImageBitmap(image2);
     }
 
@@ -228,21 +273,51 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
     protected void Coloriser(Bitmap bmp) {
-        float aleatoire = (float) (Math.random() * 360);
+        float random = (float) (Math.random() * 360);
         float HSV[] = {0, 0, 0};
+
+        int [] pixel = new int[bmp.getWidth()*bmp.getHeight()];
+        int [] color = new int[bmp.getWidth()*bmp.getHeight()];
+        bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+        for (int i =0; i < pixel.length ; i++){
+            int a = pixel[i];
+
+            /// Je convertis en HSV puis reinsert le pixel en Color ///
+
+
+
+            Color.RGBToHSV(Color.green(a), Color.red(a), Color.blue(a), HSV);
+            HSV[0] = random;
+            color[i] = Color.HSVToColor(HSV);
+
+
+            ///
+        }
+        bmp.setPixels(color,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+
+
+        // version plus coûteuse ///
+
+
+
+        /*
         for (int x = 0; x < bmp.getWidth(); x++) {
             for (int y = 0; y < bmp.getHeight(); y++) {
                 int a = bmp.getPixel(x, y);
 
                 Color.RGBToHSV(Color.green(a), Color.red(a), Color.blue(a), HSV);
-                HSV[0] = aleatoire;
+                HSV[0] = random;
                 bmp.setPixel(x, y, Color.HSVToColor(HSV));
             }
         }
+        */
+
     }
 
 
-    /// RENDERSCRIPT VERSION///
+    /// RENDERSCRIPT COLORISER VERSION///
 
 
     private void ColoriserRS(Bitmap bmp) {
@@ -252,9 +327,15 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         Allocation output = Allocation.createTyped(rs, input.getType());
 
         ScriptC_teinte ColorScript = new ScriptC_teinte(rs);
-        int rand1 =(int) (Math.random() * 360) ;
 
+        // je met un nombre aléatoire en paramètre ///
+
+
+        int rand1 =(int) (Math.random() * 360) ;
         ColorScript.set_rand1(rand1);
+
+
+        ///
 
         ColorScript.forEach_toColor(input, output);
         output.copyTo(bmp);
@@ -276,38 +357,54 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     /// JAVA VERSION ///
 
     private void Conserve(Bitmap bmp, String color) {
-        for (int x = 0; x < bmp.getWidth(); x++) {
-            for (int y = 0; y < bmp.getHeight(); y++) {
-                int a = bmp.getPixel(x, y);
-                if ( color == "red"){
-                    double Gris = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
-                    if (Color.green(a)<= 100 && Color.blue(a) <= 100 && Color.red(a)> Color.green(a) && Color.red(a)>Color.blue(a)){
-                        bmp.setPixel(x, y, Color.argb(1,Color.red(a), Color.green(a) ,Color.blue(a) ));
-                    }else{
-                        bmp.setPixel(x, y, Color.argb(1,(int) Gris, (int) Gris, (int) Gris));
-                    }
 
-                }else if( color == "green"){
-                    double Gris = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
-                    if (Color.blue(a)<= 200 && Color.red(a) <= 200 && Color.green(a)> Color.red(a) && Color.green(a)>Color.blue(a)){
-                        bmp.setPixel(x, y, Color.argb(1,Color.red(a), Color.green(a) ,Color.blue(a) ));
-                    }else{
-                        bmp.setPixel(x, y, Color.argb(1,(int) Gris, (int) Gris, (int) Gris));
-                    }
+        int [] pixel = new int[bmp.getWidth()*bmp.getHeight()];
+        int [] colortab = new int[bmp.getWidth()*bmp.getHeight()];
+        bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
 
-                }else if( color == "blue"){
-                    double Gris = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
-                    if (Color.green(a)<= 200 && Color.red(a) <= 200 && Color.blue(a)> Color.red(a) && Color.blue(a)>Color.green(a)){
-                        bmp.setPixel(x, y, Color.argb(1,Color.red(a), Color.green(a) ,Color.blue(a) ));
-                    }else{
-                        bmp.setPixel(x, y, Color.argb(1,(int) Gris, (int) Gris, (int) Gris));
-                    }
 
+
+        for (int y = 0; y < pixel.length; y++) {
+            int a = pixel[y];
+
+            /// Conserve uniquement le rouge ///
+
+            if ( color == "red"){
+                double Grey = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
+                if (Color.green(a)<= 100 && Color.blue(a) <= 100 && Color.red(a)> Color.green(a) && Color.red(a)>Color.blue(a)){
+                    colortab[y] = Color.argb(1,Color.red(a), Color.green(a) ,Color.blue(a) );
+                }else{
+                    colortab[y] = Color.argb(1,(int) Grey, (int) Grey, (int) Grey);
+                }
+
+            /// Conserve uniquement le vert ///
+
+
+            }else if( color == "green"){
+                double Grey = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
+                if (Color.blue(a)<= 200 && Color.red(a) <= 200 && Color.green(a)> Color.red(a) && Color.green(a)>Color.blue(a)){
+                    colortab[y] = Color.argb(1,Color.red(a), Color.green(a) ,Color.blue(a) );
+                }else{
+                    colortab[y] = Color.argb(1,(int) Grey, (int) Grey, (int) Grey);
+                }
+            /// Conserve uniquement le bleu ///
+
+
+            }else if( color == "blue"){
+                double Grey = 0.3 * Color.red(a) + 0.59 * Color.green(a) + 0.11 * Color.blue(a);
+                if (Color.green(a)<= 200 && Color.red(a) <= 200 && Color.blue(a)> Color.red(a) && Color.blue(a)>Color.green(a)){
+                    colortab[y] = Color.argb(1,Color.red(a), Color.green(a) ,Color.blue(a) );
+                }else{
+                    colortab[y] = Color.argb(1,(int) Grey, (int) Grey, (int) Grey);
                 }
 
             }
 
         }
+        bmp.setPixels(colortab,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+
+
 
     }
 
@@ -335,6 +432,8 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
     /// CONTRASTE GRIS ///
 
+/// Cette fonction qui return un tableau avec les niveaux de gris de l'image ///
+
 
     private int[] GreyLevel(int[] pixels , int height , int width){
         int [] Greylevel = new  int[width*height];
@@ -346,8 +445,11 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     }
 
 
+    /// Contraste dynamique ///
 
-    private void ContrasteDynamiquePlus(Bitmap bmp){
+
+
+    private void ContrastePlus(Bitmap bmp){
 
 
         // initialise un tableau avec les pixels de l'image //
@@ -399,7 +501,10 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         bmp.setPixels(newpixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
     }
 
-    private void ContrasteDynamiqueMoins(Bitmap bmp) {
+    /// Diminution du Contraste en resserant l'histogramme ///
+
+
+    private void ContrasteMoins(Bitmap bmp) {
 
 
         // initialise un tableau avec les pixels de l'image //
@@ -453,7 +558,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         max = compteur;
 
 
-        // diminution histogramme //
+        // ressert histogramme //
 
         int[] newpixel = new int[bmp.getWidth() * bmp.getHeight()];
         for (int x = 0; x < pixel.length; x++) {
@@ -632,6 +737,14 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
         } else if (Changement == true) {
+
+
+
+
+
+
+            //// Methode Dynamique ////
+
 
 
             int[] histred = new int[256];
