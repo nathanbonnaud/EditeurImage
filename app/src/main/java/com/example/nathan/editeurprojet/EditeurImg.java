@@ -432,6 +432,9 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
     /// CONTRASTE GRIS ///
 
+
+
+
 /// Cette fonction qui return un tableau avec les niveaux de gris de l'image ///
 
 
