@@ -76,6 +76,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+        boolean swap = true;
         TextView tv = (TextView) findViewById(R.id.taille);
         ImageView i = (ImageView) findViewById(R.id.imageView5);
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -168,32 +169,58 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
                 tv.setText("temps d'execution Conserve RS image2 = " + timeafter + " ms");
                 System.out.println( "temps d'execution Conserve RS image2= " + timeafter + " ms");
                 break;
-            /*case 3:
-                //Coloriser(image1);
+            case 13:
+                BitmapFactory.Options options3 = new BitmapFactory.Options();
+                options2.inMutable = true;
+                Bitmap image3 = BitmapFactory.decodeResource(getResources(), R.drawable.index3, options);
+                ContrastePlus(image3);
 
-               // break;
-            case 4:
-                ColoriserRS(image1);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Contraste + Gris = " + timeafter + " ms");
+                System.out.println( "temps d'execution Contraste + Gris= " + timeafter + " ms");
+
+                swap = false;
+                i.setImageBitmap(image3);
 
                 break;
-            case 5:
-                Conserve(image1,"red");
-                on = true;
+            case 14:
+                Bitmap image4 = BitmapFactory.decodeResource(getResources(), R.drawable.index3, options);
+                ContrasteMoins(image4);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Contraste - Gris = " + timeafter + " ms");
+                System.out.println( "temps d'execution Contraste - Gris= " + timeafter + " ms");
+
+                swap = false;
+                i.setImageBitmap(image4);
+
                 break;
-            case 6:
-                ConserveRS(image1);
-                on = true;
+            case 15:
+                ContrasteCouleur(image2,true);
+
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Contraste + Couleur = " + timeafter + " ms");
+                System.out.println( "temps d'execution Contraste + Couleur= " + timeafter + " ms");
+
                 break;
-            case 7:
-                ContrasteCouleur(image2,true );
-                on = true;
+            case 16:
+                ContrasteCouleur(image2, false);
+
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Contraste - Couleur = " + timeafter + " ms");
+                System.out.println( "temps d'execution Contraste - Couleur= " + timeafter + " ms");
                 break;
-            case 8:
-                ContrasteCouleur(image2,false );
-                on = true;
-                break;*/
+            case 17:
+                ContrasteCouleursDRS(image2);
+
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Contraste + RS = " + timeafter + " ms");
+                System.out.println( "temps d'execution Contraste +RS = " + timeafter + " ms");
+                break;
+
         }
-        i.setImageBitmap(image1);
+        if(swap ==true) {
+            i.setImageBitmap(image1);
+        }
         i2.setImageBitmap(image2);
     }
 
@@ -437,7 +464,6 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 /// Cette fonction qui return un tableau avec les niveaux de gris de l'image ///
 
-
     private int[] GreyLevel(int[] pixels , int height , int width){
         int [] Greylevel = new  int[width*height];
         for (int i =0; i< pixels.length ; i++){
@@ -478,18 +504,18 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
         int max = 0;
         int min = 0;
-        int compteur = 0;
+        int var = 0;
 
-        while (hist[compteur] == 0){
-            compteur++;
+        while (hist[var] == 0){
+            var++;
         }
-        min = compteur;
-        compteur = 255;
+        min = var;
+        var = 255;
 
-        while (hist[compteur] == 0) {
-            compteur --;
+        while (hist[var] == 0) {
+            var --;
         }
-        max = compteur;
+        max = var;
 
 
         // contraste dynamique //
@@ -503,6 +529,9 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         }
         bmp.setPixels(newpixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
     }
+
+
+
 
     /// Diminution du Contraste en resserant l'histogramme ///
 
@@ -674,52 +703,52 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
             int maxred = 0;
             int minred = 0;
-            int compteur = 0;
+            int var = 0;
 
-            while (histred[compteur] == 0) {
-                compteur++;
+            while (histred[var] == 0) {
+                var++;
             }
-            minred = compteur;
-            compteur = 255;
+            minred = var;
+            var = 255;
 
             while (histred
-                    [compteur] == 0) {
-                compteur--;
+                    [var] == 0) {
+                var--;
             }
-            maxred = compteur;
+            maxred = var;
 
             //
 
             int maxgreen = 0;
             int mingreen = 0;
-            compteur = 0;
+            var = 0;
 
-            while (histgreen[compteur] == 0) {
-                compteur++;
+            while (histgreen[var] == 0) {
+                var++;
             }
-            mingreen = compteur;
-            compteur = 255;
+            mingreen = var;
+            var = 255;
 
-            while (histgreen[compteur] == 0) {
-                compteur--;
+            while (histgreen[var] == 0) {
+                var--;
             }
-            maxgreen = compteur;
+            maxgreen = var;
 
 
             int maxblue = 0;
             int minblue = 0;
-            compteur = 0;
+            var = 0;
 
-            while (histblue[compteur] == 0) {
-                compteur++;
+            while (histblue[var] == 0) {
+                var++;
             }
-            minblue = compteur;
-            compteur = 255;
+            minblue = var;
+            var = 255;
 
-            while (histblue[compteur] == 0) {
-                compteur--;
+            while (histblue[var] == 0) {
+                var--;
             }
-            maxblue = compteur;
+            maxblue = var;
 
 
             int[] newpixel = new int[bmp.getWidth() * bmp.getHeight()];
@@ -774,52 +803,52 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
             int maxred = 0;
             int minred = 0;
-            int compteur = 0;
+            int var = 0;
 
-            while (histred[compteur] == 0) {
-                compteur++;
+            while (histred[var] == 0) {
+                var++;
             }
-            minred = compteur;
-            compteur = 255;
+            minred = var;
+            var = 255;
 
             while (histred
-                    [compteur] == 0) {
-                compteur--;
+                    [var] == 0) {
+                var--;
             }
-            maxred = compteur;
+            maxred = var;
 
             //
 
             int maxgreen = 0;
             int mingreen = 0;
-            compteur = 0;
+            var = 0;
 
-            while (histgreen[compteur] == 0) {
-                compteur++;
+            while (histgreen[var] == 0) {
+                var++;
             }
-            mingreen = compteur;
-            compteur = 255;
+            mingreen = var;
+            var = 255;
 
-            while (histgreen[compteur] == 0) {
-                compteur--;
+            while (histgreen[var] == 0) {
+                var--;
             }
-            maxgreen = compteur;
+            maxgreen = var;
 
 
             int maxblue = 0;
             int minblue = 0;
-            compteur = 0;
+            var = 0;
 
-            while (histblue[compteur] == 0) {
-                compteur++;
+            while (histblue[var] == 0) {
+                var++;
             }
-            minblue = compteur;
-            compteur = 255;
+            minblue = var;
+            var = 255;
 
-            while (histblue[compteur] == 0) {
-                compteur--;
+            while (histblue[var] == 0) {
+                var--;
             }
-            maxblue = compteur;
+            maxblue = var;
 
 
             int[] newpixel = new int[bmp.getWidth() * bmp.getHeight()];
@@ -837,7 +866,9 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
-    /// CONTRASTE COULEURS RENDERSCRIPT ///
+
+
+    /// CONTRASTE RENDERSCRIPT ///
 
 
     private void ContrasteCouleursDRS(Bitmap bmp) {
@@ -865,7 +896,9 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     }
 
 
-    /// Flou Lissage ///
+
+
+    /// Flou Lisse ///
 
 
     /// JAVA VERSION ///

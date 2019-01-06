@@ -52,10 +52,6 @@
         "source": "C:\\Users\\Nathan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\12aee2a59e568d03f8a4223ce109e26d\\res\\drawable\\abc_list_selector_holo_light.xml"
     },
     {
-        "merged": "D:\\Projet techno\\app\\build\\intermediates\\res\\merged\\debug\\drawable_index3.jpg.flat",
-        "source": "D:\\Projet techno\\app\\src\\main\\res\\drawable\\index3.jpg"
-    },
-    {
         "merged": "D:\\Projet techno\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4_abc_ic_commit_search_api_mtrl_alpha.png.flat",
         "source": "C:\\Users\\Nathan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\12aee2a59e568d03f8a4223ce109e26d\\res\\drawable-hdpi-v4\\abc_ic_commit_search_api_mtrl_alpha.png"
     },
@@ -1410,6 +1406,10 @@
     {
         "merged": "D:\\Projet techno\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4_abc_scrubber_control_to_pressed_mtrl_005.png.flat",
         "source": "C:\\Users\\Nathan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\12aee2a59e568d03f8a4223ce109e26d\\res\\drawable-xxhdpi-v4\\abc_scrubber_control_to_pressed_mtrl_005.png"
+    },
+    {
+        "merged": "D:\\Projet techno\\app\\build\\intermediates\\res\\merged\\debug\\drawable_index3.png.flat",
+        "source": "D:\\Projet techno\\app\\src\\main\\res\\drawable\\index3.png"
     },
     {
         "merged": "D:\\Projet techno\\app\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
