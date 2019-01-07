@@ -7,30 +7,33 @@
     format="10"
     ir-eligibility="COMPATIBLE"
     plugin-version="3.2.1"
-    timestamp="1546804974285"
+    timestamp="1546870423864"
     token="3201813659271010717"
     verifier="COLD_SWAP_REQUESTED" >
 
     <task
         name="javac"
-        duration="283" />
+        duration="194" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="35" />
+        duration="49" />
     <task
         name="verifier"
-        duration="8" />
+        duration="10" />
 
+    <artifact
+        location="D:\Projet techno\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
+        type="SPLIT" />
     <artifact
         location="D:\Projet techno\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
         type="SPLIT" />
 
     <build
         build-mode="FULL"
-        timestamp="1546800564941"
+        timestamp="1546867191038"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="D:\Projet techno\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
@@ -75,17 +78,11 @@
     <build
         build-mode="COLD"
         ir-eligibility="COMPATIBLE"
-        timestamp="1546804850167"
+        timestamp="1546870423864"
         verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="D:\Projet techno\app\build\intermediates\resources\instant-run\debug\resources-debug.apk"
             type="SPLIT" />
-    </build>
-    <build
-        build-mode="COLD"
-        ir-eligibility="COMPATIBLE"
-        timestamp="1546804974285"
-        verifier="COLD_SWAP_REQUESTED" >
         <artifact
             location="D:\Projet techno\app\build\intermediates\split-apk\debug\slices\slice_5.apk"
             type="SPLIT" />

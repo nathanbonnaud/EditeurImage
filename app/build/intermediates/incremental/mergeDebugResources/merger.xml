@@ -2687,6 +2687,10 @@
         <item>Contraste+(img2)</item>
         <item>Contraste-(img2)</item>
         <item>Contraste RS(img2)</item>
+        <item>Flou basique(img1)</item>
+        <item>Flou basique(img2)</item>
+        <item>Flou gaussien(img2)</item>
+
 
 
 

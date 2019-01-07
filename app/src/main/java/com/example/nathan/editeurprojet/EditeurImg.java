@@ -40,20 +40,10 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         i.setImageBitmap(image1);
 
 
-
-        //ContrasteCouleursDRS(image1);
-        //Floulissage(image1);
-
         /*
         int largeur = options.outWidth;  /// * 2.6
         int hauteur = options.outHeight;   /// *2.6
         System.out.println("largeur:" + largeur + " hauteur : " + hauteur); */
-
-
-
-
-
-
 
 
         /// MENU DEROULANT///
@@ -88,6 +78,14 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         options2.inMutable = true;
         Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.index2, options);
         Long time = System.currentTimeMillis();
+
+        int [][] matrix = new int[][]{
+                {1,2,3,2,1},
+                {2,6,8,6,2},
+                {3,8,10,8,3},
+                {2,6,8,6,2},
+                {1,2,3,2,1}
+        };
 
         switch (position) {
             case 0:
@@ -214,8 +212,33 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
                 timeafter = System.currentTimeMillis() - time;
                 tv.setText("temps d'execution Contraste + RS = " + timeafter + " ms");
-                System.out.println( "temps d'execution Contraste +RS = " + timeafter + " ms");
+                System.out.println( "temps d'execution Contraste + RS = " + timeafter + " ms");
                 break;
+            case 18:
+                Floubasique(image1);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Flou basique img1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Flou basique img1 = " + timeafter + " ms");
+
+                swap = false;
+                break;
+            case 19:
+                Floubasique(image2);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Flou basique img2 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Flou basique img2 = " + timeafter + " ms");
+
+                swap =false;
+                break;
+            case 20:
+                Flougaussien(image2, matrix);
+                timeafter = System.currentTimeMillis() - time;
+                tv.setText("temps d'execution Flou gaussien img1 = " + timeafter + " ms");
+                System.out.println( "temps d'execution Flou gaussien img1 = " + timeafter + " ms");
+
+                swap =false;
+                break;
+
 
         }
         if(swap ==true) {
@@ -310,7 +333,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         for (int i =0; i < pixel.length ; i++){
             int a = pixel[i];
 
-            /// Je convertis en HSV puis reinsert le pixel en Color ///
+            /// Je convertis en HSV puis réinsert le pixel en "Color" ///
 
 
 
@@ -325,7 +348,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-        // version plus coûteuse ///
+        // Version plus coûteuse ///
 
 
 
@@ -355,7 +378,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
         ScriptC_teinte ColorScript = new ScriptC_teinte(rs);
 
-        // je met un nombre aléatoire en paramètre ///
+        // J'envoie un nombre aléatoire en paramètre ///
 
 
         int rand1 =(int) (Math.random() * 360) ;
@@ -462,7 +485,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-/// Cette fonction qui return un tableau avec les niveaux de gris de l'image ///
+/// Cette fonction retourne un tableau avec les niveaux de gris de l'image ///
 
     private int[] GreyLevel(int[] pixels , int height , int width){
         int [] Greylevel = new  int[width*height];
@@ -481,26 +504,29 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     private void ContrastePlus(Bitmap bmp){
 
 
-        // initialise un tableau avec les pixels de l'image //
+        // Initialise un tableau avec les pixels de l'image //
 
         int [] pixel = new  int[bmp.getHeight()*bmp.getWidth()];
         bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
 
 
-        // calcul le niveau de gris de chaque pixel et le place dans un tableau//
+        // Calcul le niveau de gris de chaque pixel et le place dans un tableau//
+
         int[] greytab = GreyLevel(pixel,bmp.getHeight(),bmp.getWidth());
 
 
         int[] hist = new int[256];
         for (int index = 0; index < greytab.length; index++) {
 
-            // créer l'histogramme à partir du tableau des niveaux de gris //
+            // Créer l'histogramme à partir du tableau de niveaux de gris //
+
+
             hist[greytab[index]]++;
 
         }
 
 
-        //recupère le max et min de l'histogramme //
+        //  Récupère le max et min de l'histogramme //
 
         int max = 0;
         int min = 0;
@@ -518,7 +544,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         max = var;
 
 
-        // contraste dynamique //
+        // Contraste dynamique //
 
         int [] newpixel = new int[bmp.getWidth()*bmp.getHeight()];
         for (int x = 0; x < pixel.length; x++){
@@ -545,11 +571,11 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         bmp.getPixels(pixel, 0, bmp.getWidth(), 0, 0, bmp.getWidth(), bmp.getHeight());
 
 
-        // calcul le niveau de gris de chaque pixel et le place dans un tableau//
+        // Calcul le niveau de gris de chaque pixel et le place dans un tableau//
         int[] greytab = GreyLevel(pixel, bmp.getHeight(), bmp.getWidth());
 
 
-        // ressert l'histogramme  //
+        // Ressert l'histogramme  //
 
 
         for (int x =0; x < greytab.length; x++){
@@ -566,31 +592,15 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         int[] hist = new int[256];
         for (int index = 0; index < greytab.length; index++) {
 
-            // créer l'histogramme à partir du tableau des niveaux de gris //
+            // Créer l'histogramme à partir du tableau de niveaux de gris //
+
             hist[greytab[index]]++;
 
         }
 
 
-        //recupère le max et min de l'histogramme //
 
-        int max = 0;
-        int min = 0;
-        int compteur = 0;
-
-        while (hist[compteur] == 0) {
-            compteur++;
-        }
-        min = compteur;
-        compteur = 255;
-
-        while (hist[compteur] == 0) {
-            compteur--;
-        }
-        max = compteur;
-
-
-        // ressert histogramme //
+        // Ressert histogramme //
 
         int[] newpixel = new int[bmp.getWidth() * bmp.getHeight()];
         for (int x = 0; x < pixel.length; x++) {
@@ -604,7 +614,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     }
 
 
-    /// CONTRASTE COULEURS ///
+    /// CONTRASTE COULEUR ///
 
     private int[] Couleurlevel(int[] pixels , int height , int width ,char c) {
         int[] Couleurlevel = new int[width * height];
@@ -633,7 +643,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
     private void ContrasteCouleur(Bitmap bmp, boolean Changement) {
 
 
-        // initialise un tableau avec les pixels de l'image //
+        // Initialise un tableau avec les pixels de l'image //
 
         int[] pixel = new int[bmp.getHeight() * bmp.getWidth()];
         bmp.getPixels(pixel, 0, bmp.getWidth(), 0, 0, bmp.getWidth(), bmp.getHeight());
@@ -649,7 +659,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
         if (Changement == false){
 
 
-            // ressert l'histogramme ( diminituion du constraste)  //
+            // Ressert l'histogramme (diminituion du constraste)  //
 
 
         for (int x =0; x < redtab.length; x++){
@@ -699,57 +709,6 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             }
 
 
-            //recupère le max et min de chaque histogrammes  //
-
-            int maxred = 0;
-            int minred = 0;
-            int var = 0;
-
-            while (histred[var] == 0) {
-                var++;
-            }
-            minred = var;
-            var = 255;
-
-            while (histred
-                    [var] == 0) {
-                var--;
-            }
-            maxred = var;
-
-            //
-
-            int maxgreen = 0;
-            int mingreen = 0;
-            var = 0;
-
-            while (histgreen[var] == 0) {
-                var++;
-            }
-            mingreen = var;
-            var = 255;
-
-            while (histgreen[var] == 0) {
-                var--;
-            }
-            maxgreen = var;
-
-
-            int maxblue = 0;
-            int minblue = 0;
-            var = 0;
-
-            while (histblue[var] == 0) {
-                var++;
-            }
-            minblue = var;
-            var = 255;
-
-            while (histblue[var] == 0) {
-                var--;
-            }
-            maxblue = var;
-
 
             int[] newpixel = new int[bmp.getWidth() * bmp.getHeight()];
 
@@ -764,8 +723,6 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             bmp.setPixels(newpixel, 0, bmp.getWidth(), 0, 0, bmp.getWidth(), bmp.getHeight());
 
 
-            //////////
-
 
 
         } else if (Changement == true) {
@@ -775,7 +732,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-            //// Methode Dynamique ////
+            //// Méthode Dynamique ////
 
 
 
@@ -783,7 +740,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             int[] histgreen = new int[256];
             int[] histblue = new int[256];
 
-            /// Créer 3 histogrammes pour chaque couleurs ///
+            /// Créer 3 histogrammes pour chaque couleur ///
 
 
             for (int index = 0; index < redtab.length; index++) {
@@ -799,7 +756,7 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             }
 
 
-            //recupère le max et min de chaque histogrammes  //
+            //Recupère le max et min de chaque histogramme  //
 
             int maxred = 0;
             int minred = 0;
@@ -905,14 +862,16 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
-    private Bitmap Floulissage(Bitmap bmp){
+    private Bitmap Floubasique(Bitmap bmp){
+
+
         ImageView i = (ImageView) findViewById(R.id.imageView5);
         Bitmap newimg = Bitmap.createBitmap(bmp.getWidth(),bmp.getHeight(), bmp.getConfig() );
 
         /// taille du masque appliqué ///
 
 
-        int n = 10;
+        int n = 5 ;
         int div = (2*n +1)*(2*n+1);
 
 
@@ -927,6 +886,8 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
             for (int y = n; y < newimg.getHeight()-n; y++ ){
 
                 /// va chercher les valeurs r g b des pixels autours //
+
+
                 int a =0;
                 int b = 0;
                 int c = 0;
@@ -957,5 +918,67 @@ public class EditeurImg extends AppCompatActivity implements AdapterView.OnItemS
 
 
 
+    /// Flou gaussien ////
 
+
+    /// Même fonction que la précédente mais on rajoute une matrice défini à l'avance ////
+
+
+    private Bitmap Flougaussien(Bitmap bmp, int [][] matrix){
+        ImageView i = (ImageView) findViewById(R.id.imageView5);
+        Bitmap newimg = Bitmap.createBitmap(bmp.getWidth(),bmp.getHeight(), bmp.getConfig() );
+
+        /// taille du masque appliqué ///
+
+
+        int n = matrix.length/2;
+        int div = 0;
+
+        // Parcours la matrice ///
+
+
+        for (int e =0;  e< matrix.length; e++){
+            for (int f =0;  f< matrix.length; f++) {
+                div += matrix[e][f];
+            }
+        }
+
+
+
+        int [] pixel = new int[bmp.getWidth()*bmp.getHeight()];
+        int [] newpixel = new int[bmp.getWidth()*bmp.getHeight()];
+        bmp.getPixels(pixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+
+
+
+        for (int x = n; x < newimg.getWidth()-n; x++){
+            for (int y = n; y < newimg.getHeight()-n; y++ ){
+
+                /// Va chercher les valeurs r g b des pixels autours //
+
+
+                int a =0;
+                int b = 0;
+                int c = 0;
+                for (int x2 = 0; x2 < matrix.length; x2++) {
+                    for (int y2 = 0; y2 < matrix.length; y2++) {
+                        int e = pixel[(x - matrix.length/2)+x2 + ((y - matrix.length/2)+y2)*bmp.getWidth()];
+                        a = a + Color.red(e) * matrix[x2][y2];
+                        b = b + Color.green(e)  * matrix[x2][y2];
+                        c = c + Color.blue(e)  * matrix[x2][y2];
+
+                    }
+                }
+
+                newpixel[x + (y*newimg.getWidth())] = Color.argb(255,a/div,b/div,c/div);
+
+
+
+            }
+        }
+        newimg.setPixels(newpixel,0,bmp.getWidth(),0,0,bmp.getWidth(),bmp.getHeight());
+        i.setImageBitmap(newimg);
+        return newimg;
+
+    }
 }
